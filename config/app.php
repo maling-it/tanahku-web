@@ -20,6 +20,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application API URL
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used by the application to generate URLs for the API. You
+    | should set this to the root of your application so that it is used
+    | when running API requests.
+    |
+    */
+
+    'api_url' => env('API_URL', 'https://api.tanahku.online'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
