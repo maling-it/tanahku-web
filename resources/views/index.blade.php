@@ -2,7 +2,6 @@
     <div class="card h-50 m-2">
         <x-map-tanahku/>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
 </x-app-layout>
 <style>
     .popover-body {

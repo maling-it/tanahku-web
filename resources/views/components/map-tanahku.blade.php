@@ -1,3 +1,6 @@
+@vite([
+    'resources/js/app.js'
+])
 <div id="map" class="map"></div>
 
 <style>
