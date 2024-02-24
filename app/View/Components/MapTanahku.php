@@ -5,7 +5,7 @@ namespace App\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Illuminate\Support\Facades\Http;
+use App\Models\Device;
 
 class MapTanahku extends Component
 {
@@ -16,10 +16,11 @@ class MapTanahku extends Component
      */
     public function __construct()
     {
-        $apiUrl = env('API_URL') . "/api/v1/device/all";
-        $response = Http::get($apiUrl);
+        $deviceModel = new Device();
 
-        $this->devices = $response->json()['data'];
+        $allDevices = $deviceModel->getAll();
+
+        $this->devices = $allDevices['data'];
     }
 
     /**
