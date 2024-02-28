@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/about', function () {
+    return view('about');
+});
+
 Route::get('/device', [DeviceController::class, 'index']);
 Route::get('/device/{id}', [DeviceController::class, 'show']);
 Route::get('/docs', function () {
