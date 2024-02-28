@@ -22,4 +22,10 @@ class AirTemperature
 
         return $response->json();
     }
+    public function getAll()
+    {
+        $response = Http::get("{$this->apiUrl}/alldata");
+
+        return $response->json();
+    }
 }
