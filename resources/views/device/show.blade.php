@@ -1,4 +1,6 @@
 <x-app-layout>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <div class="card p-3 m-3">
         <h1 class="card-title">{{ $device['data']['name'] }}</h1>
         <div class="card-body">
@@ -8,123 +10,139 @@
             <p>Longitude: {{ $device['data']['longitude'] }}</p>
         </div>
     </div>
-    @if (!@empty($airTemperatureData['data']))
-        <div class="card p-3 m-3">
-            <h2 class="card-title">Air Temperature</h2>
-            <div class="card-body">
-                <div id="airchart"></div>
-            </div>
-            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var data = {!! json_encode($airTemperatureData['data']) !!};
-                    console.log(data);
-                    var chartData = data.map(function(item) {
-                        return {
-                            x: new Date(item.createdOn).getTime().toString(),
-                            y: item.value,
-                        };
-                    });
+    <?php
+    $dataSets = [
+        [
+            'title' => 'Air Temperature',
+            'chartId' => 'airchart',
+            'data' => $airTemperatureData['data'] ?? [],
+            'seriesName' => 'Temperature',
+            'unit' => '°C',
+        ],
+        [
+            'title' => 'Wind Speed',
+            'chartId' => 'windspeed',
+            'data' => $windSpeedData['data'] ?? [],
+            'seriesName' => 'Speed',
+            'unit' => 'm/s',
+        ],
+        [
+            'title' => 'Soil PH',
+            'chartId' => 'soilph',
+            'data' => $soilPhData['data'] ?? [],
+            'seriesName' => 'Ph',
+            'unit' => '',
+        ],
+        [
+            'title' => 'Soil Moisture',
+            'chartId' => 'soilmois',
+            'data' => $soilMoisData['data'] ?? [],
+            'seriesName' => 'Moisture',
+            'unit' => '',
+        ],
+        [
+            'title' => 'Rain Fall',
+            'chartId' => 'rainfall',
+            'data' => $rainFallData['data'] ?? [],
+            'seriesName' => 'rain',
+            'unit' => 'mm',
+        ],
+        [
+            'title' => 'Solar Radiation',
+            'chartId' => 'solarrad',
+            'data' => $solarRadData['data'] ?? [],
+            'seriesName' => 'radiation',
+            'unit' => 'W/m²',
+        ],
+        [
+            'title' => 'Humidity',
+            'chartId' => 'humidity',
+            'data' => $humidityData['data'] ?? [],
+            'seriesName' => 'humidity',
+            'unit' => '%',
+        ],
+    ];
 
-                    var airtemperature = {
-                        series: [{
-                            name: 'tes',
-                            data: chartData
-                        }],
-                        chart: {
-                            height: 350,
-                            type: 'bar'
-                        },
-                        plotOptions: {
-                            bar: {
-                                columnWidth: '60%'
-                            }
-                        },
-                        colors: ['#00E396'],
-                        dataLabels: {
-                            enabled: false
-                        },
-                        tooltip: {
-                            theme: 'dark',
-                            y: {
-                                formatter: function(val) {
-                                    return val + " °C";
+    ?>
+    @foreach ($dataSets as $dataSet)
+        @if (!empty($dataSet['data']))
+            <div class="card p-2 m-3">
+                <h2 class="card-title text-center">{{ $dataSet['title'] }}</h2>
+                <div class="card-body">
+                    <div id="{{ $dataSet['chartId'] }}"></div>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var data = {!! json_encode($dataSet['data']) !!};
+                        console.log(data);
+                        var chartData = data.map(function(item) {
+                            return {
+                                x: new Date(item.createdOn).toLocaleString(undefined, {
+                                    dateStyle: 'short',
+                                    timeStyle: 'short'
+                                }),
+                                y: item.value,
+                            };
+                        });
+
+                        var chartOptions = {
+                            series: [{
+                                name: '{{ $dataSet['seriesName'] }}',
+                                data: chartData,
+                                color: '#00E396'
+                            }],
+                            chart: {
+                                height: 350,
+                                type: 'bar',
+                                zoom: {
+                                    enabled: true,
+                                    type: 'x',
+                                    autoScaleYaxis: true
+                                },
+                                toolbar: {
+                                    autoSelected: 'zoom'
                                 }
-                            }
-                        }
-                    };
+                            },
+                            plotOptions: {
+                                bar: {
+                                    columnWidth: '60%'
+                                }
+                            },
+                            colors: ['#00E396'],
+                            dataLabels: {
+                                enabled: false
+                            },
+                            tooltip: {
+                                theme: 'dark',
+                                y: {
+                                    formatter: function(val) {
+                                        return val + " {{ $dataSet['unit'] }}";
+                                    }
+                                }
+                            },
+                            responsive: [{
+                                breakpoint: 480,
+                                options: {
+                                    chart: {
+                                        width: '100%'
+                                    },
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }]
+                        };
 
-
-                    var chart = new ApexCharts(document.querySelector("#airchart"), airtemperature);
-
-                    chart.render();
-                });
-            </script>
-        </div>
-    @else
-        <div class="alert alert-danger m-3" role="alert">
-            <h5 class="alert-heading">Air Temperature</h5>
-            <p>No Air Temperature data available</p>
-        </div>
-    @endif
-    {{-- Windspeed --}}
-    @if (!@empty($windSpeedData['data']))
-    <div class="card p-3 m-3">
-        <h2 class="card-title">Wind Speed</h2>
-        <div class="card-body">
-            <div id="windspeed"></div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var data = {!! json_encode($windSpeedData['data']) !!};
-                console.log(data);
-                var chartData = data.map(function(item) {
-                    return {
-                        x: new Date(item.createdOn).getTime().toString(),
-                        y: item.value,
-                    };
-                });
-
-                var windspeed = {
-                    series: [{
-                        name: 'tes',
-                        data: chartData
-                    }],
-                    chart: {
-                        height: 350,
-                        type: 'bar'
-                    },
-                    plotOptions: {
-                        bar: {
-                            columnWidth: '60%'
-                        }
-                    },
-                    colors: ['#00E396'],
-                    dataLabels: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        theme: 'dark',
-                        y: {
-                            formatter: function(val) {
-                                return val + " °C";
-                            }
-                        }
-                    }
-                };
-
-
-                var chart = new ApexCharts(document.querySelector("#windspeed"), windspeed);
-
-                chart.render();
-            });
-        </script>
-    </div>
-@else
-    <div class="alert alert-danger m-3" role="alert">
-        <h5 class="alert-heading">Wind Speed</h5>
-        <p>No Wind Speed data available</p>
-    </div>
-@endif
+                        var chart = new ApexCharts(document.querySelector("#{{ $dataSet['chartId'] }}"), chartOptions);
+                        chart.render();
+                    });
+                </script>
+            </div>
+        @else
+            <div class="alert alert-danger m-3" role="alert">
+                <h5 class="alert-heading">{{ $dataSet['title'] }}</h5>
+                <p>No {{ $dataSet['title'] }} data available</p>
+            </div>
+        @endif
+    @endforeach
 </x-app-layout>

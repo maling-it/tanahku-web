@@ -1,6 +1,6 @@
 <nav class="sidebar offcanvas-start offcanvas-md" tabindex="-1" id="sidebar-example">
     <div class="offcanvas-header border-bottom border-secondary border-opacity-25">
-        <a class="sidebar-brand" href="/">
+        <a class="sidebar-brand" href="{{ config('app.url') }}/">
             <img src="{{ config('app.url') }}/favicon.png" alt="Logo" height="24"
                 class="d-inline-block align-text-top">
             {{ config('app.name', 'Tanahku') }}
@@ -13,11 +13,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ config('app.url') }}" aria-current="page">Dashboard</a>
             </li>
-            <li>
-                <hr class="sidebar-divider">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ config('app.url') }}/about" aria-current="page">About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ config('app.url') }}/docs" aria-current="page">Docs</a>
+            </li>
+            <li>
+                <hr class="sidebar-divider">
             </li>
         </ul>
     </div>
