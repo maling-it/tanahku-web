@@ -23,7 +23,7 @@ const map = new Map({
     layers: [layer],
     target: 'map',
     view: new View({
-        zoom: 6,
+        zoom: 7,
     }),
 });
 map.getView().setCenter(fromLonLat([longitude, latitude]));
@@ -31,9 +31,9 @@ map.getView().setCenter(fromLonLat([longitude, latitude]));
 function titikTanah(device) {
     const coordinate = fromLonLat([parseFloat(device.longitude), parseFloat(device.latitude)]);
     const dote = document.createElement('a');
-    dote.className = 'dot';
+    dote.className = 'dot dot-bubble';
     dote.setAttribute('href', '/device/' + device.id);
-    const color = 'red'
+    const color = 'green'
 
     dote.style.backgroundColor = color;
 
