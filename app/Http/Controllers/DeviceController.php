@@ -2,18 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Models\Device;
+use App\Models\AirTemperature;
+use App\Models\WindSpeed;
 
 class DeviceController extends Controller
 {
+    public function index()
+    {
+        $deviceModel = new Device();
+
+        $devices = $deviceModel->getAll();
+
+        return view('device.index', compact('devices'));
+    }
+
     public function show($id)
     {
-        $apiUrl = env('API_URL') . "/api/v1/device/{$id}";
-        $response = Http::get($apiUrl);
+        $deviceModel = new Device();
+        $device = $deviceModel->getById($id);
 
-        $device = $response->json();
+        $airTemperatureModel = new AirTemperature();
+        $airTemperatureData = $airTemperatureModel->getAllData($id);
 
-        return view('device.show', compact('device'));
+        $windSpeedModel = new WindSpeed();
+        $windSpeedData = $windSpeedModel->getAllData($id);
+
+        return view('device.show', compact(
+            'device',
+            'airTemperatureData',
+            'windSpeedData'
+        ));
     }
 }

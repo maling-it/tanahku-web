@@ -1,8 +1,17 @@
 <x-app-layout>
-    <div class="card h-50 m-2">
+    <div class="card p-3 h-full m-2">
+        <h2 class="card-title">
+            Peta Tanahku
+        </h2>
+        <div class="card-body">
+            Menampilakan Perangkat yang tersedia
+        </div>
+    </div>
+    <div class="m-2">
+
         <x-map-tanahku/>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </x-app-layout>
 <style>
     .popover-body {
