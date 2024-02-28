@@ -74,7 +74,6 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         var data = {!! json_encode($dataSet['data']) !!};
-                        console.log(data);
                         var chartData = data.map(function(item) {
                             return {
                                 x: new Date(item.createdOn).toLocaleString(undefined, {
